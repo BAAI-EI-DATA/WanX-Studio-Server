@@ -1,8 +1,8 @@
 now_robot_type: [aloha, pika, realman, dexterous_hand, so101, galaxea]
-robot_type: aloha
+robot_type: realman
 device_server_ip: http://localhost:8088
 device_server_port: 8088
-device_data_path: /home/liuyou/Documents/wanx-studio-dataset-example
+device_data_path: /home/robot/dataset/
 
 
 now_device_server_type: [release, dev, demo]
@@ -12,7 +12,7 @@ platform_server_ip_dev: http://120.92.91.171/api
 platform_server_ip_demo: https://ei2rmd-demo.baai.ac.cn/api
 
 
-upload_type: ks3
+upload_type: nas
 upload_time: '20:00'
 
 nas_cache_path_release: /传输路径/release/cache
