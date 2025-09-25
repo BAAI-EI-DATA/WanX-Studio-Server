@@ -25,16 +25,18 @@ fi
 echo "📦 正在更新 ${REPO_DIR} 的代码..."
 cd "${REPO_DIR}" || handle_error "无法进入目录 ${REPO_DIR}"
 
+# 标记文件（只需一次）.sh, .yaml, .txt 文件（避免覆盖本地修改）
+git update-index --skip-worktree *.sh *.yaml *.json
 # 拉取最新代码（排除特定文件类型）
 echo "🔄 执行 git pull..."
-git pull origin "${BRANCH}" || handle_error "git pull 失败"
-
-# 恢复 .sh, .yaml, .txt 文件（避免覆盖本地修改）
-echo "🛡️ 正在恢复 .sh, .yaml, .txt 文件（不更新这些文件）..."
-git checkout -- '*.sh' '*.yaml' '*.json'
+git pull || handle_error "git pull 失败"
 
 # 3. 重启 Docker 容器
-echo "🚀 正在重启容器 '${CONTAINER_NAME}'..."
-sudo docker start "${CONTAINER_NAME}" || handle_error "重启容器失败"
+if sudo docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+    echo "🚀 正在重启容器 '${CONTAINER_NAME}'..."
+    sudo docker start "${CONTAINER_NAME}" || handle_error "重启容器失败"
 
-echo "✅ 更新完成！容器已重启。"
+    echo "✅ 更新完成！容器已重启。"
+else
+    echo "ℹ️ 容器 '${CONTAINER_NAME}' 未运行，跳过停止步骤。"
+fi
