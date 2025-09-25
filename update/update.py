@@ -53,9 +53,11 @@ def show_update_notification(local_tag, remote_tag, script_path):
 
     最新发布版本: {remote_tag}
 
-    请暂停 数据采集，
+    请暂停数据采集，
 
-    点击"确定" 将自动执行更新脚本:{script_path}
+    点击"确定" 
+    
+    将自动执行更新脚本:{script_path}
     """
     
     # 显示确认弹窗
@@ -82,7 +84,6 @@ try:
 
     if local_tag == remote_tag:
         print("✅ 本地代码与最新 Release 版本一致")
-        show_update_notification(local_tag, remote_tag, update_script)  # 显示弹窗
     else:
         print("❌ 本地代码与最新 Release 版本不一致")
         show_update_notification(local_tag, remote_tag, update_script)  # 显示弹窗
