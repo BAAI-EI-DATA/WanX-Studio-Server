@@ -15,7 +15,7 @@ CURRENT_USER=$(whoami)
 VOLUMES=(
     "-v /home/${CURRENT_USER}/DoRobot/dataset/:/home/robot/dataset/"
     "-v /home/${CURRENT_USER}/WanX-Studio-Server/x86/:/app/code/"
-    "-v /home/${CURRENT_USER}/.config/:/home/machine/.config/"
+    "-v /opt/wanx_studio/config/:/home/machine/.config/"
 )
 
 # ====================== 逻辑部分 ======================
