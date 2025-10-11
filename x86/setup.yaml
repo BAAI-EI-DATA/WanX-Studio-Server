@@ -38,14 +38,14 @@ ks3_data_bucket_demo: baai-eai-datasets-test
 ks3_data_target_demo: data
 
 
-machine_id_path_release: /home/machine/.config/baai_platform/machine_code
-machine_code_path_release: /home/machine/.config/baai_platform/unique_code
+machine_id_path_release: /home/machine/config/machine_code
+machine_code_path_release: /home/machine/config/unique_code
 
-machine_id_path_dev: /home/machine/.config/baai_platform/machine_code_dev
-machine_code_path_dev: /home/machine/.config/baai_platform/unique_code_dev
+machine_id_path_dev: /home/machine/config/machine_code_dev
+machine_code_path_dev: /home/machine/config/unique_code_dev
 
-machine_id_path_demo: /home/machine/.config/baai_platform/machine_code_demo
-machine_code_path_demo: /home/machine/.config/baai_platform/unique_code_demo
+machine_id_path_demo: /home/machine/config/machine_code_demo
+machine_code_path_demo: /home/machine/config/unique_code_demo
 
-code_version: v1.0
+log_path: /home/machine/log/server/
 
