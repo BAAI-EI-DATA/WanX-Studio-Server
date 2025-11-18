@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ====================== 配置参数（可修改） ======================
-CONTAINER_NAME="baai-server"      # 容器名称
+CONTAINER_NAME="server-gpu"      # 容器名称
 IMAGE_NAME="baai-flask-server"  # 镜像名称
 PORTS="--network host"                  # 使用主机网络
 ENCODE="-e PYTHONIOENCODING=utf-8"      # 编码设置
@@ -14,7 +14,7 @@ CURRENT_USER=$(whoami)
 # 动态构建卷挂载路径
 VOLUMES=(
     "-v /home/${CURRENT_USER}/DoRobot/dataset/:/home/robot/dataset/"
-    "-v /opt/WanX-Studio-Server/x86/franka/:/app/code/"
+    "-v /opt/WanX-Studio-Server/x86_upload/:/app/code/"
     "-v /opt/wanx_studio/:/home/machine/"
 )
 
@@ -45,8 +45,11 @@ done
 # 启动交互式容器
 sudo docker run -it \
     --name ${CONTAINER_NAME} \
+    --gpus all \
     -e LANG=C.UTF-8 \
     -e LC_ALL=C.UTF-8 \
+    -e NVIDIA_DRIVER_CAPABILITIES=all \
+    -v /usr/lib/x86_64-linux-gnu/libnvidia-encode.so.535.230.02:/usr/lib/x86_64-linux-gnu/libnvidia-encode.so.1 \
     ${ENCODE} \
     ${PRIVILEGED} \
     ${PORTS} \

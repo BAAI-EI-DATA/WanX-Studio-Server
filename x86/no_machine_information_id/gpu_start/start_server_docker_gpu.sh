@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # ====================== 配置参数（可修改） ======================
-CONTAINER_NAME="baai_flask_server"      # 容器名称
-IMAGE_NAME="baai-flask-server"  # 镜像名称
+CONTAINER_NAME="server-gpu"      # 容器名称
+IMAGE_NAME="baai-flask-server-gpu"  # 镜像名称
 #PORTS="-p 8088:8088"                    # 端口映射
 ENCODE="-e PYTHONIOENCODING=utf-8"
 PORTS="--network host"
@@ -14,7 +14,7 @@ CURRENT_USER=$(whoami)
 
 # 动态构建卷挂载路径
 VOLUMES="-v /home/${CURRENT_USER}/DoRobot/dataset/:/home/robot/dataset/"
-VOLUMES2="-v /opt/WanX-Studio-Server/x86/:/app/code/"
+VOLUMES2="-v /opt/WanX-Studio-Server/x86_upload/:/app/code/"
 VOLUMES3="-v /opt/wanx_studio/:/home/machine/"
 
 # ====================== 逻辑部分（增强版） ======================
@@ -24,17 +24,15 @@ if sudo docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
     # 容器存在，检查是否正在运行
     if sudo docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
         echo "容器 '${CONTAINER_NAME}' 正在运行。"
-        # 检查是否可以进入（避免重启中）
-        if ! sudo docker inspect -f '{{.State.Running}}' ${CONTAINER_NAME} | grep -q "true"; then
-            echo "⚠️ 警告：容器处于非正常运行状态（可能正在重启）！"
-            echo "查看日志："
-            sudo docker logs --tail 20 ${CONTAINER_NAME}
-            echo "尝试临时禁用重启策略并调试..."
-            sudo docker update --restart=no ${CONTAINER_NAME}
-            sudo docker start ${CONTAINER_NAME}  # 手动启动一次
-            echo "现在可以尝试进入容器："
-            echo "sudo docker exec -it ${CONTAINER_NAME} bash"
-            exit 1
+        
+        # 询问用户是否要重启容器
+        read -p "容器正在运行，是否要重启它？(y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo "正在重启容器..."
+            sudo docker restart ${CONTAINER_NAME}
+        else
+            echo "保持容器运行，不执行重启操作。"
         fi
     else
         # 容器存在但未运行，尝试启动
@@ -46,8 +44,11 @@ else
     echo "创建并启动新容器 '${CONTAINER_NAME}'..."
     sudo docker run -d \
         --name ${CONTAINER_NAME} \
+        --gpus all \
         -e LANG=C.UTF-8 \
         -e LC_ALL=C.UTF-8 \
+        -e NVIDIA_DRIVER_CAPABILITIES=all \
+        -v /usr/lib/x86_64-linux-gnu/libnvidia-encode.so.535.230.02:/usr/lib/x86_64-linux-gnu/libnvidia-encode.so.1 \
         ${ENCODE} \
         ${PRIVILEGED} \
         ${RESTART_POLICY} \
