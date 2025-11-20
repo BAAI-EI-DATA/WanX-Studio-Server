@@ -12,12 +12,12 @@ platform_server_ip_dev: http://120.92.91.171/api
 platform_server_ip_demo: http://120.92.91.171:30083/api
 
 
-is_upload: True
-upload_immadiately_gpu: True
-is_update_machine_information: True
-is_collect_upload_at_sametime: False
+is_upload: true
+upload_immadiately_gpu: false
+is_update_machine_information: false
+is_collect_upload_at_sametime: false
 
-upload_type_list: [ks3,nas]
+upload_type_list: [ks3, nas]
 upload_type: ks3
 upload_time: '20:00'
 
