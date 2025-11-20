@@ -14,7 +14,7 @@ CURRENT_USER=$(whoami)
 
 # 动态构建卷挂载路径
 VOLUMES="-v /home/${CURRENT_USER}/DoRobot/dataset/:/home/robot/dataset/"
-VOLUMES2="-v /opt/WanX-Studio-Server/x86_upload/:/app/code/"
+VOLUMES2="-v /opt/WanX-Studio-Server/x86/:/app/code/"
 VOLUMES3="-v /opt/wanx_studio/:/home/machine/"
 
 # ====================== 逻辑部分（增强版） ======================
