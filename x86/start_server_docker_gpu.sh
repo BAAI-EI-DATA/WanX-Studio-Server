@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # ====================== 配置参数（可修改） ======================
-CONTAINER_NAME="server-gpu"      # 容器名称
-IMAGE_NAME="baai-flask-server-gpu"  # 镜像名称
+CONTAINER_NAME="baai_flask_server"      # 容器名称
+IMAGE_NAME="baai-flask-server"  # 镜像名称
 #PORTS="-p 8088:8088"                    # 端口映射
 ENCODE="-e PYTHONIOENCODING=utf-8"
 PORTS="--network host"
