@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ====================== 配置参数（可修改） ======================
-CONTAINER_NAME="baai_flask_server_gpu"      # 容器名称
+CONTAINER_NAME="baai_flask_server"      # 容器名称
 IMAGE_NAME="baai-flask-server"  # 镜像名称
 PORTS="--network host"                  # 使用主机网络
 ENCODE="-e PYTHONIOENCODING=utf-8"      # 编码设置
