@@ -14,8 +14,8 @@ CURRENT_USER=$(whoami)
 
 # 动态构建卷挂载路径
 VOLUMES="-v /home/${CURRENT_USER}/DoRobot/dataset/:/home/robot/dataset/"
-VOLUMES2="-v /home/${CURRENT_USER}/WanX-Studio-Server/arm/:/app/code/"
-VOLUMES3="-v /home/${CURRENT_USER}/.config/:/home/machine/.config/"
+VOLUMES2="-v /opt/WanX-Studio-Server/x86/:/app/code/"
+VOLUMES3="-v /opt/wanx_studio/:/home/machine/"
 
 # ====================== 逻辑部分（增强版） ======================
 
@@ -24,15 +24,17 @@ if sudo docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
     # 容器存在，检查是否正在运行
     if sudo docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
         echo "容器 '${CONTAINER_NAME}' 正在运行。"
-        
-        # 询问用户是否要重启容器
-        read -p "容器正在运行，是否要重启它？(y/n) " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            echo "正在重启容器..."
-            sudo docker restart ${CONTAINER_NAME}
-        else
-            echo "保持容器运行，不执行重启操作。"
+        # 检查是否可以进入（避免重启中）
+        if ! sudo docker inspect -f '{{.State.Running}}' ${CONTAINER_NAME} | grep -q "true"; then
+            echo "⚠️ 警告：容器处于非正常运行状态（可能正在重启）！"
+            echo "查看日志："
+            sudo docker logs --tail 20 ${CONTAINER_NAME}
+            echo "尝试临时禁用重启策略并调试..."
+            sudo docker update --restart=no ${CONTAINER_NAME}
+            sudo docker start ${CONTAINER_NAME}  # 手动启动一次
+            echo "现在可以尝试进入容器："
+            echo "sudo docker exec -it ${CONTAINER_NAME} bash"
+            exit 1
         fi
     else
         # 容器存在但未运行，尝试启动
